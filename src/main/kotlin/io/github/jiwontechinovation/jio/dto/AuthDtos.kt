@@ -14,6 +14,12 @@ data class SignupRequest(
     val password: String
 )
 
+data class SetPasswordRequest(
+    @field:NotBlank(message = "Password is required")
+    @field:Size(min = 6, message = "Password must be at least 6 characters")
+    val password: String
+)
+
 data class SigninRequest(
     @field:NotBlank(message = "Email is required")
     @field:Email(message = "Invalid email format")

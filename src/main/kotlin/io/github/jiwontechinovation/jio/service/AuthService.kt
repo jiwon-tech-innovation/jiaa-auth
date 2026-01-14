@@ -108,4 +108,12 @@ class AuthService(
             role = user.role.name
         )
     }
+
+    @Transactional
+    fun changePassword(user: User, request: SetPasswordRequest) {
+        val updatedUser = user.copy(
+            password = passwordEncoder.encode(request.password)!!
+        )
+        userRepository.save(updatedUser)
+    }
 }
