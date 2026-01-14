@@ -1,0 +1,114 @@
+﻿Initialized native services in: C:\Users\yoons\.gradle\native
+Initialized jansi services in: C:\Users\yoons\.gradle\native
+The client will now receive all logging from the daemon (pid: 5536). The daemon log file: C:\Users\yoons\.gradle\daemon\9.2.1\daemon-5536.out.log
+Starting 2nd build in daemon [uptime: 32.21 secs, performance: 100%, GC rate: 0.00/s, heap usage: 0% of 512 MiB, non-heap usage: 19% of 384 MiB]
+Using 8 worker leases.
+Operational build model parameters: {requiresToolingModels=false, parallelProjectExecution=false, configureOnDemand=false, configurationCache=false, configurationCacheParallelStore=false, configurationCacheParallelLoad=true, isolatedProjects=false, parallelProjectConfiguration=false, intermediateModelCache=false, parallelToolingApiActions=false, invalidateCoupledProjects=false, modelAsProjectDependency=false, resilientModelBuilding=false}
+Now considering [C:\Users\yoons\OneDrive\문서\GitHub\project-JIAA-DevOps\jiaa-auth] as hierarchies to watch
+Watching the file system is configured to be enabled if available
+File system watching is active
+Starting Build
+Settings evaluated using settings file 'C:\Users\yoons\OneDrive\문서\GitHub\project-JIAA-DevOps\jiaa-auth\settings.gradle.kts'.
+Projects loaded. Root project using build file 'C:\Users\yoons\OneDrive\문서\GitHub\project-JIAA-DevOps\jiaa-auth\build.gradle.kts'.
+Included projects: [root project 'jio']
+
+> Configure project :
+Evaluating root project 'jio' using build file 'C:\Users\yoons\OneDrive\문서\GitHub\project-JIAA-DevOps\jiaa-auth\build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm', version: '2.2.21']
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.spring', version: '2.2.21']
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.jpa', version: '2.2.21']
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.noarg', version: '2.2.21']
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.allopen', version: '2.2.21']
+Resolved plugin [id: 'org.springframework.boot', version: '4.0.1']
+Resolved plugin [id: 'io.spring.dependency-management', version: '1.1.7']
+Build 6b73bbac-0950-4cc3-8891-5c721d6c5754 is started
+Using Kotlin Gradle Plugin gradle813 variant
+kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+Applying dependency management to configuration 'annotationProcessor' in project 'jio'
+Applying dependency management to configuration 'api' in project 'jio'
+Applying dependency management to configuration 'apiDependenciesMetadata' in project 'jio'
+Applying dependency management to configuration 'apiElements' in project 'jio'
+Applying dependency management to configuration 'archives' in project 'jio'
+Applying dependency management to configuration 'bootArchives' in project 'jio'
+Applying dependency management to configuration 'compileClasspath' in project 'jio'
+Applying dependency management to configuration 'compileOnly' in project 'jio'
+Applying dependency management to configuration 'compileOnlyDependenciesMetadata' in project 'jio'
+Applying dependency management to configuration 'default' in project 'jio'
+Applying dependency management to configuration 'developmentOnly' in project 'jio'
+Applying dependency management to configuration 'implementation' in project 'jio'
+Applying dependency management to configuration 'implementationDependenciesMetadata' in project 'jio'
+Applying dependency management to configuration 'intransitiveDependenciesMetadata' in project 'jio'
+Applying dependency management to configuration 'kotlinBouncyCastleConfiguration' in project 'jio'
+Applying dependency management to configuration 'kotlinBuildToolsApiClasspath' in project 'jio'
+Applying dependency management to configuration 'kotlinCompilerClasspath' in project 'jio'
+Applying dependency management to configuration 'kotlinCompilerPluginClasspath' in project 'jio'
+Applying dependency management to configuration 'kotlinCompilerPluginClasspathMain' in project 'jio'
+Applying dependency management to configuration 'kotlinCompilerPluginClasspathTest' in project 'jio'
+Applying dependency management to configuration 'kotlinInternalAbiValidation' in project 'jio'
+Applying dependency management to configuration 'kotlinKlibCommonizerClasspath' in project 'jio'
+Applying dependency management to configuration 'kotlinNativeCompilerPluginClasspath' in project 'jio'
+Applying dependency management to configuration 'kotlinScriptDef' in project 'jio'
+Applying dependency management to configuration 'kotlinScriptDefExtensions' in project 'jio'
+Applying dependency management to configuration 'mainSourceElements' in project 'jio'
+Applying dependency management to configuration 'productionRuntimeClasspath' in project 'jio'
+Applying dependency management to configuration 'runtimeClasspath' in project 'jio'
+Applying dependency management to configuration 'runtimeElements' in project 'jio'
+Applying dependency management to configuration 'runtimeOnly' in project 'jio'
+Applying dependency management to configuration 'swiftExportClasspath' in project 'jio'
+Applying dependency management to configuration 'swiftExportClasspathResolvable' in project 'jio'
+Applying dependency management to configuration 'testAndDevelopmentOnly' in project 'jio'
+Applying dependency management to configuration 'testAnnotationProcessor' in project 'jio'
+Applying dependency management to configuration 'testApi' in project 'jio'
+Applying dependency management to configuration 'testApiDependenciesMetadata' in project 'jio'
+Applying dependency management to configuration 'testCompileClasspath' in project 'jio'
+Applying dependency management to configuration 'testCompileOnly' in project 'jio'
+Applying dependency management to configuration 'testCompileOnlyDependenciesMetadata' in project 'jio'
+Applying dependency management to configuration 'testImplementation' in project 'jio'
+Applying dependency management to configuration 'testImplementationDependenciesMetadata' in project 'jio'
+Applying dependency management to configuration 'testIntransitiveDependenciesMetadata' in project 'jio'
+Applying dependency management to configuration 'testKotlinScriptDef' in project 'jio'
+Applying dependency management to configuration 'testKotlinScriptDefExtensions' in project 'jio'
+Applying dependency management to configuration 'testResultsElementsForTest' in project 'jio'
+Applying dependency management to configuration 'testRuntimeClasspath' in project 'jio'
+Applying dependency management to configuration 'testRuntimeOnly' in project 'jio'
+Applying dependency management to configuration 'apiElements-published' in project 'jio'
+Applying dependency management to configuration 'runtimeElements-published' in project 'jio'
+All projects evaluated.
+Task name matched 'compileKotlin'
+Selected primary task 'compileKotlin' from project :
+Resolving global dependency management for project 'jio'
+Excluding []
+Excluding []
+Starting process 'command 'C:\Users\yoons\.jdks\corretto-17.0.7\bin\java.exe''. Working directory: C:\Users\yoons\.gradle\.tmp\tmp-jvm2084601447202800102probe Command: C:\Users\yoons\.jdks\corretto-17.0.7\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Users\yoons\.jdks\corretto-17.0.7\bin\java.exe''
+Invalid Java installation found at 'C:\Users\yoons\.jdks\corretto-17.0.7' (IntelliJ) auto-detected. It will be re-checked in the next build. This might have performance impact if it keeps failing. Run the 'javaToolchains' task for more details.
+Build 6b73bbac-0950-4cc3-8891-5c721d6c5754 is closed
+./gradlew : 
+위치 줄:1 문자:1
++ ./gradlew compileKotlin --info 2>&1 | Out-File -Encoding utf8 build_l ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Watched directory hierarchies: []
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Could not determine the dependencies of task ':compileKotlin'.
+> Cannot find a Java installation on your machine (Windows 11 10.0 amd64) 
+matching: {languageVersion=21, vendor=any vendor, 
+implementation=vendor-specific, nativeImageCapable=false}. Toolchain 
+download repositories have not been configured.
+
+* Try:
+> Learn more about toolchain auto-detection and auto-provisioning at 
+https://docs.gradle.org/9.2.1/userguide/toolchains.html#sec:auto_detection.
+> Learn more about toolchain repositories at https://docs.gradle.org/9.2.1/
+userguide/toolchains.html#sub:download_repositories.
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+> Run with --scan to generate a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 4s

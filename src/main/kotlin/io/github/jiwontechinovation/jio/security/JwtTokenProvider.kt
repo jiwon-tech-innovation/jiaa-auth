@@ -53,14 +53,14 @@ class JwtTokenProvider(
     
     fun getRefreshExpirationMs(): Long = refreshExpirationMs
     
-    fun getUserIdFromToken(token: String): Long {
+    fun getUserIdFromToken(token: String): UUID {
         val claims = Jwts.parser()
             .verifyWith(key)
             .build()
             .parseSignedClaims(token)
             .payload
         
-        return claims.subject.toLong()
+        return UUID.fromString(claims.subject)
     }
     
     fun getEmailFromToken(token: String): String {
