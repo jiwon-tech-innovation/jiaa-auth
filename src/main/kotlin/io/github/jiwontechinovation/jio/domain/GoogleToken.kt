@@ -13,7 +13,7 @@ data class GoogleToken(
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true, nullable = false)
-    val user: User,
+    var user: User,
 
     @Column(name = "google_email", unique = true)
     var googleEmail: String? = null,

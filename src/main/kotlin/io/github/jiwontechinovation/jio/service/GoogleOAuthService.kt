@@ -86,11 +86,23 @@ class GoogleOAuthService(
     fun saveTokens(user: User, accessToken: String, refreshToken: String?, expiresInSeconds: Int?, googleEmail: String) {
         val expiresAt = expiresInSeconds?.let { LocalDateTime.now().plusSeconds(it.toLong()) }
 
-        val existingToken = googleTokenRepository.findByUser(user)
-        if (existingToken.isPresent) {
-            val token = existingToken.get()
+        // 1. Find by User
+        var existingToken = googleTokenRepository.findByUser(user).orElse(null)
+
+        // 2. Fallback: Find by Email (to handle orphaned tokens)
+        if (existingToken == null) {
+            existingToken = googleTokenRepository.findByGoogleEmail(googleEmail).orElse(null)
+            if (existingToken != null) {
+                // Found orphan! Re-link to current user
+                existingToken.user = user
+            }
+        }
+
+        if (existingToken != null) {
+            val token = existingToken
             token.accessToken = accessToken
             token.googleEmail = googleEmail
+            // user is already updated if it was an orphan
             if (refreshToken != null) token.refreshToken = refreshToken
             token.expiresAt = expiresAt
             token.updatedAt = LocalDateTime.now()
