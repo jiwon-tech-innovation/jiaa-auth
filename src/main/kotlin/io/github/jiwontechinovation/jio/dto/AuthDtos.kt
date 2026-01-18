@@ -41,6 +41,12 @@ data class UserResponse(
     val role: String
 )
 
+data class PasswordUpdateRequest(
+    @field:NotBlank(message = "Password is required")
+    @field:Size(min = 6, message = "Password must be at least 6 characters")
+    val password: String
+)
+
 data class MessageResponse(
     val message: String
 )

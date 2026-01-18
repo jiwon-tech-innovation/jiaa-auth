@@ -2,10 +2,12 @@ package io.github.jiwontechinovation.jio.controller
 
 import io.github.jiwontechinovation.jio.domain.Role
 import io.github.jiwontechinovation.jio.domain.User
+import io.github.jiwontechinovation.jio.repository.GoogleTokenRepository
 import io.github.jiwontechinovation.jio.repository.UserRepository
 import io.github.jiwontechinovation.jio.security.JwtTokenProvider
 import io.github.jiwontechinovation.jio.service.GoogleOAuthService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
@@ -15,6 +17,7 @@ import java.util.UUID
 class GoogleOAuthController(
     private val googleOAuthService: GoogleOAuthService,
     private val userRepository: UserRepository,
+    private val googleTokenRepository: GoogleTokenRepository,
     private val jwtProvider: JwtTokenProvider,
     private val passwordEncoder: PasswordEncoder
 ) {
@@ -73,6 +76,36 @@ class GoogleOAuthController(
             "refreshToken" to appRefreshToken,
             "expiresIn" to jwtProvider.getRefreshExpirationMs(),
             "email" to email
+        ))
+    }
+
+    /**
+     * Get Google OAuth connection status for current user
+     */
+    @GetMapping("/status")
+    fun getStatus(@AuthenticationPrincipal user: User): ResponseEntity<Map<String, Any>> {
+        val tokenOpt = googleTokenRepository.findByUser(user)
+        val connected = tokenOpt.isPresent
+        
+        val emailValue: Any? = if (connected) user.email else null
+        
+        return ResponseEntity.ok(mapOf<String, Any>(
+            "connected" to connected,
+            "email" to (emailValue as? Any ?: "")
+        ))
+    }
+
+    /**
+     * Get Google access token for current user (for Calendar API usage)
+     */
+    @GetMapping("/token")
+    fun getGoogleToken(@AuthenticationPrincipal user: User): ResponseEntity<Map<String, Any>> {
+        val accessToken = googleOAuthService.getAccessToken(user.id ?: throw IllegalStateException("User ID is null"))
+            ?: return ResponseEntity.status(404).body(mapOf("error" to "Google token not found"))
+
+        return ResponseEntity.ok(mapOf(
+            "accessToken" to accessToken,
+            "email" to user.email
         ))
     }
 }

@@ -108,4 +108,10 @@ class AuthService(
             role = user.role.name
         )
     }
+
+    @Transactional
+    fun updatePassword(user: User, newPassword: String) {
+        user.password = passwordEncoder.encode(newPassword)!!
+        userRepository.save(user)
+    }
 }

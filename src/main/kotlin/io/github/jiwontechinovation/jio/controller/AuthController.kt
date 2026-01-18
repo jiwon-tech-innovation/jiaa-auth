@@ -44,4 +44,13 @@ class AuthController(
         val response = authService.getCurrentUser(user)
         return ResponseEntity.ok(response)
     }
+
+    @PatchMapping("/password")
+    fun updatePassword(
+        @AuthenticationPrincipal user: User,
+        @Valid @RequestBody request: PasswordUpdateRequest
+    ): ResponseEntity<MessageResponse> {
+        authService.updatePassword(user, request.password)
+        return ResponseEntity.ok(MessageResponse("Password updated successfully"))
+    }
 }
