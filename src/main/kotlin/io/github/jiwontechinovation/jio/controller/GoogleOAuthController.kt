@@ -98,6 +98,17 @@ class GoogleOAuthController(
         ))
     }
 
+    /**
+     * Get Google access token for the authenticated user (for Calendar API, etc.)
+     * Refreshes token if expired
+     */
+    @GetMapping("/token")
+    fun getToken(@io.github.jiwontechinovation.jio.security.CurrentUser user: User): ResponseEntity<Map<String, String>> {
+        val accessToken = googleOAuthService.getAccessToken(user.id)
+            ?: throw IllegalStateException("Google account not connected")
+        return ResponseEntity.ok(mapOf("accessToken" to accessToken))
+    }
+
     @DeleteMapping("/disconnect")
     fun disconnect(@io.github.jiwontechinovation.jio.security.CurrentUser user: User): ResponseEntity<Void> {
         googleOAuthService.disconnect(user)
