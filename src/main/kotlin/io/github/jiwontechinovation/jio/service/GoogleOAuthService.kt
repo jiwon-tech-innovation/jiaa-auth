@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate
 import java.net.URLEncoder
 import java.time.LocalDateTime
 
+import java.util.Optional
+
 @Service
 class GoogleOAuthService(
     private val googleConfig: GoogleOAuthConfig,
@@ -81,13 +83,26 @@ class GoogleOAuthService(
     /**
      * Save or update Google tokens for a user
      */
-    fun saveTokens(user: User, accessToken: String, refreshToken: String?, expiresInSeconds: Int?) {
+    fun saveTokens(user: User, accessToken: String, refreshToken: String?, expiresInSeconds: Int?, googleEmail: String) {
         val expiresAt = expiresInSeconds?.let { LocalDateTime.now().plusSeconds(it.toLong()) }
 
-        val existingToken = googleTokenRepository.findByUser(user)
-        if (existingToken.isPresent) {
-            val token = existingToken.get()
+        // 1. Find by User
+        var existingToken = googleTokenRepository.findByUser(user).orElse(null)
+
+        // 2. Fallback: Find by Email (to handle orphaned tokens)
+        if (existingToken == null) {
+            existingToken = googleTokenRepository.findByGoogleEmail(googleEmail).orElse(null)
+            if (existingToken != null) {
+                // Found orphan! Re-link to current user
+                existingToken.user = user
+            }
+        }
+
+        if (existingToken != null) {
+            val token = existingToken
             token.accessToken = accessToken
+            token.googleEmail = googleEmail
+            // user is already updated if it was an orphan
             if (refreshToken != null) token.refreshToken = refreshToken
             token.expiresAt = expiresAt
             token.updatedAt = LocalDateTime.now()
@@ -95,6 +110,7 @@ class GoogleOAuthService(
         } else {
             googleTokenRepository.save(GoogleToken(
                 user = user,
+                googleEmail = googleEmail,
                 accessToken = accessToken,
                 refreshToken = refreshToken,
                 expiresAt = expiresAt
@@ -105,7 +121,8 @@ class GoogleOAuthService(
     /**
      * Get access token for a user (refresh if expired)
      */
-    fun getAccessToken(userId: Long): String? {
+    fun getAccessToken(userId: java.util.UUID?): String? {
+        if (userId == null) return null
         val tokenOpt = googleTokenRepository.findByUserId(userId)
         if (tokenOpt.isEmpty) return null
 
@@ -150,5 +167,26 @@ class GoogleOAuthService(
 
         @Suppress("UNCHECKED_CAST")
         return response.body as Map<String, Any>? ?: throw RuntimeException("Failed to refresh token")
+    }
+
+    fun isConnected(user: User): Boolean {
+        return googleTokenRepository.findByUser(user).isPresent
+    }
+
+    fun getGoogleToken(user: User): GoogleToken? {
+        return googleTokenRepository.findByUser(user).orElse(null)
+    }
+
+    fun disconnect(user: User) {
+        val tokenOpt = googleTokenRepository.findByUser(user)
+        if (tokenOpt.isPresent) {
+            googleTokenRepository.delete(tokenOpt.get())
+        }
+    }
+
+    fun findUserByGoogleEmail(googleEmail: String): User? {
+        return googleTokenRepository.findByGoogleEmail(googleEmail)
+            .map { it.user }
+            .orElse(null)
     }
 }

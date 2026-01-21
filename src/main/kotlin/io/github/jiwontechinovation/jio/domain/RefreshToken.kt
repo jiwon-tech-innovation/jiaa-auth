@@ -2,13 +2,14 @@ package io.github.jiwontechinovation.jio.domain
 
 import jakarta.persistence.*
 import java.time.Instant
+import java.util.UUID
 
 @Entity
 @Table(name = "refresh_tokens")
 data class RefreshToken(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val id: UUID? = null,
 
     @Column(nullable = false, unique = true)
     val token: String,

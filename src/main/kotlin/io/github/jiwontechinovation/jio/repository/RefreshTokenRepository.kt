@@ -8,9 +8,10 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import java.time.Instant
 import java.util.Optional
+import java.util.UUID
 
 @Repository
-interface RefreshTokenRepository : JpaRepository<RefreshToken, Long> {
+interface RefreshTokenRepository : JpaRepository<RefreshToken, UUID> {
     fun findByToken(token: String): Optional<RefreshToken>
     fun deleteByToken(token: String)
     fun deleteByUser(user: User)

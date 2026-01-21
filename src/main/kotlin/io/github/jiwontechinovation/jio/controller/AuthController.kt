@@ -44,4 +44,13 @@ class AuthController(
         val response = authService.getCurrentUser(user)
         return ResponseEntity.ok(response)
     }
+
+    @PatchMapping("/password")
+    fun setPassword(
+        @io.github.jiwontechinovation.jio.security.CurrentUser user: User,
+        @Valid @RequestBody request: SetPasswordRequest
+    ): ResponseEntity<MessageResponse> {
+        authService.changePassword(user, request)
+        return ResponseEntity.ok(MessageResponse("Password set successfully"))
+    }
 }

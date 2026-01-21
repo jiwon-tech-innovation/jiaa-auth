@@ -28,7 +28,8 @@ class SecurityConfig(
             .authorizeHttpRequests { auth ->
                 auth
                     .requestMatchers("/api/auth/signup", "/api/auth/signin", "/api/auth/refresh").permitAll()
-                    .requestMatchers("/api/auth/google/**").permitAll()
+                    .requestMatchers("/api/auth/google/url", "/api/auth/google/callback").permitAll()
+                    .requestMatchers("/api/auth/google/token", "/api/auth/google/status", "/api/auth/google/disconnect").authenticated()
                     .requestMatchers("/api/auth/**").authenticated()
                     .anyRequest().permitAll()
             }

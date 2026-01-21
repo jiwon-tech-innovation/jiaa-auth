@@ -22,7 +22,7 @@ server:
 
 jwt:
   secret: ${JWT_SECRET:jiaa-super-secret-key-for-jwt-token-generation-must-be-at-least-256-bits-long}
-  access-expiration: ${JWT_ACCESS_EXPIRATION:900000}    # 15 minutes in milliseconds
+  access-expiration: ${JWT_ACCESS_EXPIRATION:86400000}    # 24 hours in milliseconds
   refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}  # 7 days in milliseconds
 
 

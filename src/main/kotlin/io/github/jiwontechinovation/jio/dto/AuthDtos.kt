@@ -3,12 +3,19 @@ package io.github.jiwontechinovation.jio.dto
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
+import java.util.UUID
 
 data class SignupRequest(
     @field:NotBlank(message = "Email is required")
     @field:Email(message = "Invalid email format")
     val email: String,
     
+    @field:NotBlank(message = "Password is required")
+    @field:Size(min = 6, message = "Password must be at least 6 characters")
+    val password: String
+)
+
+data class SetPasswordRequest(
     @field:NotBlank(message = "Password is required")
     @field:Size(min = 6, message = "Password must be at least 6 characters")
     val password: String
@@ -36,7 +43,7 @@ data class TokenResponse(
 )
 
 data class UserResponse(
-    val id: Long,
+    val id: UUID?,
     val email: String,
     val role: String
 )

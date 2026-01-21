@@ -31,7 +31,10 @@ class GoogleOAuthController(
      * Handle OAuth callback - exchange code for tokens, create/find user, return JWT
      */
     @GetMapping("/callback")
-    fun handleCallback(@RequestParam code: String): ResponseEntity<Map<String, Any>> {
+    fun handleCallback(
+        @RequestParam code: String,
+        @io.github.jiwontechinovation.jio.security.CurrentUser currentUser: User?
+    ): ResponseEntity<Map<String, Any>> {
         // 1. Exchange code for tokens
         val tokens = googleOAuthService.exchangeCodeForTokens(code)
         val accessToken = tokens["access_token"] as? String
@@ -41,18 +44,27 @@ class GoogleOAuthController(
 
         // 2. Get user info from Google
         val userInfo = googleOAuthService.getUserInfo(accessToken)
-        val email = userInfo["email"] as? String
+        val googleEmail = userInfo["email"] as? String
             ?: throw IllegalStateException("No email received from Google")
         val name = userInfo["name"] as? String
 
-        // 3. Find or create user
-        val user = userRepository.findByEmail(email).orElseGet {
-            userRepository.save(User(
-                email = email,
-                name = name,
-                password = passwordEncoder.encode(UUID.randomUUID().toString())!!, // Random password for OAuth users
-                role = Role.USER
-            ))
+        // 3. Resolve user (Link or Login)
+        val user = if (currentUser != null) {
+            // mode 1: Linking (User is already authenticated)
+            currentUser
+        } else {
+            // mode 2: Login/Signup
+            // 2.1 Try to find user who has this Google account linked
+            googleOAuthService.findUserByGoogleEmail(googleEmail)
+                ?: userRepository.findByEmail(googleEmail).orElseGet {
+                    // 2.2 Not linked, not existing email -> Create new user
+                    userRepository.save(User(
+                        email = googleEmail,
+                        name = name,
+                        password = passwordEncoder.encode(UUID.randomUUID().toString())!!,
+                        role = Role.USER
+                    ))
+                }
         }
 
         // 3.1 Update name if missing but available now
@@ -61,8 +73,8 @@ class GoogleOAuthController(
             userRepository.save(user)
         }
 
-        // 4. Save Google tokens
-        googleOAuthService.saveTokens(user, accessToken, refreshToken, expiresIn)
+        // 4. Save Google tokens (Linking happens here)
+        googleOAuthService.saveTokens(user, accessToken, refreshToken, expiresIn, googleEmail)
 
         // 5. Generate app JWT
         val appAccessToken = jwtProvider.generateAccessToken(user)
@@ -72,7 +84,34 @@ class GoogleOAuthController(
             "accessToken" to appAccessToken,
             "refreshToken" to appRefreshToken,
             "expiresIn" to jwtProvider.getRefreshExpirationMs(),
-            "email" to email
+            "email" to user.email,
+            "googleEmail" to googleEmail
         ))
+    }
+
+    @GetMapping("/status")
+    fun getStatus(@io.github.jiwontechinovation.jio.security.CurrentUser user: User): ResponseEntity<Map<String, Any?>> {
+        val googleToken = googleOAuthService.getGoogleToken(user)
+        return ResponseEntity.ok(mapOf<String, Any?>(
+            "connected" to (googleToken != null),
+            "email" to googleToken?.googleEmail
+        ))
+    }
+
+    /**
+     * Get Google access token for the authenticated user (for Calendar API, etc.)
+     * Refreshes token if expired
+     */
+    @GetMapping("/token")
+    fun getToken(@io.github.jiwontechinovation.jio.security.CurrentUser user: User): ResponseEntity<Map<String, String>> {
+        val accessToken = googleOAuthService.getAccessToken(user.id)
+            ?: throw IllegalStateException("Google account not connected")
+        return ResponseEntity.ok(mapOf("accessToken" to accessToken))
+    }
+
+    @DeleteMapping("/disconnect")
+    fun disconnect(@io.github.jiwontechinovation.jio.security.CurrentUser user: User): ResponseEntity<Void> {
+        googleOAuthService.disconnect(user)
+        return ResponseEntity.ok().build()
     }
 }

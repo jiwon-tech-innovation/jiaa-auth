@@ -2,17 +2,21 @@ package io.github.jiwontechinovation.jio.domain
 
 import jakarta.persistence.*
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Entity
 @Table(name = "google_tokens")
 data class GoogleToken(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val id: UUID? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true, nullable = false)
-    val user: User,
+    var user: User,
+
+    @Column(name = "google_email", unique = true)
+    var googleEmail: String? = null,
 
     @Column(name = "access_token", nullable = false, length = 2048)
     var accessToken: String,
